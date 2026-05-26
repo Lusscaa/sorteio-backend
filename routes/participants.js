@@ -42,7 +42,7 @@ const abbreviateName = (name) => {
 router.get('/', async (req, res) => {
 
   const { data, error } = await supabase
-    .from('Nome')
+    .from('participants')
     .select('*')
     .order('numeroParticipacao', { ascending: true });
 
@@ -91,12 +91,12 @@ router.post('/',
 
     // BUSCA DUPLICADOS
     const { data: existentes } = await supabase
-      .from('Nome')
+      .from('participants')
       .select('*');
 
     const duplicate = existentes.find(
       p =>
-        p['E-mail'] === email ||
+        p.email === email ||
         p.Tel === whatsapp
     );
 
@@ -114,14 +114,14 @@ router.post('/',
         : 1;
 
     const { error } = await supabase
-      .from('Nome')
+      .from('participants')
       .insert([
         {
           nome: nome,
-          'E-mail': email,
-          Tel: whatsapp,
-          Print1: comprovante1,
-          Print2: comprovante2,
+          email: email,
+          tel: whatsapp,
+          print1: comprovante1,
+          print2: comprovante2,
           numeroParticipacao: nextNum,
           status: 'aguardando',
           criadoEm: new Date().toISOString()
